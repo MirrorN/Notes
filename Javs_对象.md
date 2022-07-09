@@ -129,21 +129,57 @@ public class ClassName{
 
 Java 内存分配
 
-- 方法区： HelloWorld.class 等字节码文件加载的时候进入内存
+- 方法区： HelloWorld.class 等字节码文件加载的时候进入内存 （JDK8 之后将其原本功能归类到 元空间 和 堆 中）
 - 栈内存： 方法运行时进入的内存，其中创建的变量也是存储在这里
 - 堆内存： 使用 new 关键字创建的内容会在堆中开辟空间并产生地址 
 
+##### 一个对象的内存图
 
+```
+Student s = new Student()
+```
 
+创建对象过程：
 
+- 在方法区加载 class 字节码文件
+- 申明局部变量
+- 在 堆 内存中开辟一个空间
+- 默认初始化
+- 显示初始化
+- 构造方法初始化
+- 将堆内存中的地址值赋给左边的局部变量
 
+对于类：
 
+```java
+public class Student {
+    String name;
+    int age;
 
+    public void study(){
+        System.out.println("...");
+    }
+}
+```
 
+在实际创建对象的时候:
 
+```java
+public class TestStudent{  // 将 TestStudent.class 文件加载到方法区 
+	public static void main(String[] args){ // 方法 在 栈 中开辟空间
+		Student s = new Student();  // 加载 Student.class 文件（方法区）
+                                 // new 关键字 在堆 中开辟空间，对于参数的值，有三步：（1）默认初始化，赋默认值（null，0等等），随后显示初始化，如果明确指出某个变量的值，则赋值，（3）根据构造方法进行初始化，这里进行无参构造方法初始化
+                                 // 创建之后 s 中保存的是 堆 中的地址
+		System.out.println(s)   // 输出的结果为对象 s 在堆中的地址值
+	}
+                              // main 方法执行完毕后， 整个方法在 栈 中退出，随之变量消失，与之对应的 堆 中的对象也成为垃圾
 
+}
+```
 
+对于两个同类对象的创建，.class 文件只需要加载一次即可
 
+对于两个引用指向同一个对象， Student s2 = s1， 那么实际上是 将 s2 指向开始 s1 指向的 堆 中对象的地址，如果使用 s1 = null， 则变量名 与 实际对象的联系就会断开，如果继续使用就会出现 空指针 异常
 
 
 
