@@ -24,6 +24,7 @@ System.out.println(st3);
 // 由于字符数组是可以更改的，因此可以用这种方式方便地堆字符串进行改变
 char[] chs = {'a', 'b', 'c', 'd'};
 String st4 = new String(chs);
+char[] chss = st4.toCharArray();
 System.out.println(st4);
 
 //根据字节数组 创建字符串对象
@@ -141,6 +142,68 @@ String StringBuilder.toString()  // 转化为 String 类型
 
 Java底层对 StringBuilder 进行了特殊处理，因此可以直接使用 println(StringBuilder) 
 
+**相较于 String， StringBuilder 的应用场景：**
+
+- 对字符串进行拼接 （提高字符串拼接效率），与 String 方法一样，其后可拼接的内容可以是数字，字符等等
+- 对字符串进行反转
+
+
+
+### StringJoiner
+
+相当于StringBuilder 针对字符串拼接功能的定制版，使用简单
+
+其构造方法有两种：
+
+- StringJoiner（间隔符号）
+- StringJoiner（间隔符号，开始符号，结束符号）
+
+主要成员方法：
+
+- **sj.add()** 添加数据，返回 sj 对象本身**（注意这里定义的方法是 add()， 而不是 append() ）**，这里添加的元素只能是 字符串 类型
+- sj.length() 返回长度
+- toString() 方法
+
+
+
+### 字符串进行拼接的原理
+
+第一种，如果进行拼接的都是常量，没有变量，则 Java 会自动进行优化，在编译的时候就可以得到最终结果，即：
+
+原始 java 文件：
+
+```
+s = "a" + "b" + "c"
+```
+
+编译的 class 文件：
+
+```
+s = "abc"
+```
+
+第二种，如果是变量和常量进行拼接， 则在 JDK8 以前，首先会创建一个 StringBuilder 对象，随后进行拼接，最后调用 toString 方法生成一个 String 对象，因此，进行一次拼接，至少会在堆内存中生成两个对象，所以在进行多次拼接的时候，效率会很低
+
+JDK8优化后，会首先预估长度，随后创建数组进行保存  （因此，直接使用 + 进行字符串拼接的方式效率低的原因就是会多次创建对象，因此效率较低）
+
+
+
+### String.toCharArray()
+
+将 String 对象转化为 char 数组，方便对于其中字符的修改。字符数组转化为字符串则可以直接使用字符数组作为参数的String构造方法
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -157,5 +220,8 @@ Java底层对 StringBuilder 进行了特殊处理，因此可以直接使用 pri
 
 
 
+#### 快速进入某个方法
 
+鼠标点击方法，按住 `Ctrl`，随后点击方法链接，即可进入方法
 
+在当前文件或整个工程中查找某个方法，可以使用 `Ctrl + F12`
