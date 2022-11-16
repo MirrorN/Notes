@@ -153,18 +153,20 @@ commitID 可以使用 `git-log`或者`git reflog`命令查看
 团队合作开发有两种方式：
 
 - 团队内协作
-
   - 通过 push - clone - pull 操作完成
   - 每个成员都可以将自己的修改 push 到远程仓库
   - 团队成员可以通过 clone 将远程仓库克隆到本地
   - 代码修改后，团队成员可以通过 pull 将远程仓库拉取到本地
-
 - 跨团队协作
-
   - 团队之外的人可以通过 fork 仓库对仓库内容修改（可提交多次）
   - 修改完成后进行 pull request，将修改交由仓库管理员审核
 
-  
+### 拉取、推送代码
+
+- `git remote -v`显示所有的远程库
+- `git remote add REPOSITORY_NAME ADDRESS`：添加远程仓库，并设置别名（REPOSITORY_NAME）
+- `git clone ADDRESS`：克隆到本地，克隆会拉取代码，并进行本地初始化以及创建别名（origin）
+- `git pull REPOSITORY_NAME BRANCH_NAME `
 
 ## 通过 ignore 屏蔽不想提交的文件
 
