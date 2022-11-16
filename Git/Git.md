@@ -53,20 +53,53 @@ export LANG="zh_CN.UTF-8"
 export LC_ALL="zh_CN.UTF-8"
 ```
 
-## 基础操作指令
+## 常用指令
 
 Git 工作目录的几种状态：
 
 ![image-20221114133544106](Git.assets/image-20221114133544106.png)
 
 - 暂存区：提交到仓库之前的缓存区（git add .）
-- 将暂存区内容提交到仓库后，每次提交生成提交记录
+- 将暂存区内容提交到仓库后，每次提交生成提交记录（生成历史版本，此时代码删不掉）
 
-主要命令：
+常用命令：
 
-- `git status`：查看状态
-- `git add .`：将修改添加到暂存区
-- `git commit -m '注释内容'`：提交到仓库
+- `git config --global user.name` 用户名 （设置用户签名）
+- `git config --global user.email` 邮箱（这两个命令只需首次使用时候设置）
+- `git init`初始化本地仓库
+- `git status`查看本地库状态
+- `git add FILENAME`，`git add .`添加到暂存区
+- `git commit -m "MESSAGE" FILENAME`，`git commit -m "MESSAGE"`提交到本地库
+- `git reflog` 查看历史版本
+- `git reset --hard VERSION_CODE` 版本穿梭
+
+### 设置用户签名
+
+`git config --global user.name` 和`git config --global user.email`设置用户签名，用于区别代码提交者，用户的签名信息可以在每一个版本的提交信息中看到，从而确定提交由谁发起，Git 首次使用必须设置一下用户签名，否则无法提交代码，此外，注意此处设置的用户签名与登录 Github 或其他代码托管中心的账号没有任何关系
+
+设置完成后可在用户的系统目录下，`.gitconfig`文件中看到
+
+### 初始化本地库
+
+使用`git init`初始化仓库
+
+### 新增文件
+
+使用命令 `git add FILENAME`将工作区文件提交到暂存区
+
+使用命令`git rm --cached FILENAME` 移除提交到暂存区的文件（工作区为改变）
+
+这一步易出现的警告：
+
+```
+warning: LF will be replaced by CRLF in filexxx
+```
+
+这是因为在安装 Git 的时候勾选了自动根据系统切换换行符（windows 下换行符是 CRLF，Linux 下则是 LF）
+
+### 提交到本地仓库
+
+使用命令`git commit -m "MESSAGE"FILENAME`，将暂存区内容提交到本地仓库
 
 ### 查看提交日志
 
@@ -77,7 +110,7 @@ Git 工作目录的几种状态：
 - --abbrev-commit  简化输出信息
 - --graph  以图的形式显示
 
-为了使用方便，可以使用别名设置简化命令，在`bash.bashrc`：
+为了使用方便，可以使用别名设置简化命令，在`bash.bashrc`中添加：
 
 ```
 alias git-log='git log --pretty=oneline --all --graph --abbrev-commit'
@@ -87,7 +120,9 @@ alias ll='ls -al'
 source ~/bash
 ```
 
-## 版本回退
+**查看所有版本（即使回退也可以看到）**：使用 `git reflog`命令
+
+### 版本回退
 
 版本回退用于版本切换：
 
@@ -95,7 +130,41 @@ source ~/bash
 git reset --hard commitID
 ```
 
-commitID 可以使用 git-log 命令查看，类似
+commitID 可以使用 `git-log`或者`git reflog`命令查看
+
+## 分支
+
+版本控制的过程中，为了同时推进多个任务，可以为每个任务创建单独的分支，将每个任务从研发主线上分离出来，这样开发自己分支的同时不会影响主线运行（分支的底层通过指针引用实现）
+
+分支的主要命令：
+
+- `git branch NAME`创建分支
+- `git branch -v`查看分支
+- `git checkout NAME`切换分支
+- `git merge NAME`将指定分支合并到当前分支上
+- `git branch -d NAME`，先移动到其他分支，再通过此命令删除分支，如果删除不成功，则使用强制删除`git branch -D NAME`
+
+### 合并冲突
+
+不同分支对于同一文件同一位置进行修改
+
+## 团队协作
+
+团队合作开发有两种方式：
+
+- 团队内协作
+
+  - 通过 push - clone - pull 操作完成
+  - 每个成员都可以将自己的修改 push 到远程仓库
+  - 团队成员可以通过 clone 将远程仓库克隆到本地
+  - 代码修改后，团队成员可以通过 pull 将远程仓库拉取到本地
+
+- 跨团队协作
+
+  - 团队之外的人可以通过 fork 仓库对仓库内容修改（可提交多次）
+  - 修改完成后进行 pull request，将修改交由仓库管理员审核
+
+  
 
 ## 通过 ignore 屏蔽不想提交的文件
 
